@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 自动扫描注解：通过dubbo实现 -->
+	<dubbo:annotation package="com.ustcinfo.lh.*" />
+	<!-- 必须加上：提供方应用服务端的名称 -->
+	<dubbo:application name="dubbo-client" />
+
+	<!-- 服务端需要把dubbo服务注册到zookeeper上进行广播 -->
+	<dubbo:registry address="zookeeper://127.0.0.1:2181" />
+	<!-- 注册需要使用的dubbo服务，通过interface指定服务接口 通过version来消费 通过check来决定是否启东检查 -->
+	<dubbo:reference id="personInfoService" interface="com.ustcinfo.lh.dubbo.IPersonInfoService"
+		timeout="10000" mock="com.ustcinfo.lh.dubbo.TestMock"  protocol="dubbo" check="false"/>
+<!--	<dubbo:reference id="personInfoService" interface="com.ustcinfo.lh.dubbo.IPersonInfoService" />-->
+
+	<dubbo:reference id="demoServie" interface="com.ustcinfo.lh.dubbo.IDemoService"
+					 timeout="10000"  protocol="http" check="false"/>
+	<bean id="personInfoTest" class="com.ustcinfo.lh.dubbo.PersonInfoTest"></bean>
+
+
+</beans>
